@@ -61,6 +61,8 @@
       - [Create multiple components with a single hook](#create-multiple-components-with-a-single-hook)
       - [Create multiple components with a single HOC 2](#create-multiple-components-with-a-single-hoc-2)
       - [Create multiple components with a single hook 2](#create-multiple-components-with-a-single-hook-2)
+  - [Testing custom hooks](#testing-custom-hooks)
+    - [Testing component which use custom hooks](#testing-component-which-use-custom-hooks)
   - [Migrating common libraries to hooks](#migrating-common-libraries-to-hooks)
     - [react-redux](#react-redux)
     - [react-router](#react-router)
@@ -610,15 +612,37 @@ const Hello: React.FC<{ name, fetchName: () => void }> = ({ name, fetchName }) =
 
 ## useDebugValue
 
-The last among the hooks, but not least is the `useDebugValue` hook. In the words of the React team:
+The last among the hooks, is the `useDebugValue` hook. I only recently found out about the hook, blessed be intellisense, and my reaction was along the lines of:
 
-> We don’t recommend adding debug values to every custom Hook. It’s most valuable for custom Hooks that are part of shared libraries.
+"Wait there's a hook called `useDebugValue`, that sounds intriguing, so what does it do?"
 
-Since we are going explore creating out own hooks in the next section, the `useDebugValue` hook is going to get some shine. This is especially true when you start creating more complex hooks. Being able to easily debug them is going to make life a lot easier.
+> `useDebugValue` can be used to display a label for custom hooks in React DevTools.
 
-`useDebugValue` can be used to display a label for custom hooks in [React DevTools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en). So let's see what it's all about.
+"I love React DevTools, this must a really great addition to my hooks arsenal! Let's test it out. Okay, I've created a custom hook. It's named `useValue`, so its label in DevTools should be equivalent to Value."
+
+"It is, alright! That wasn't difficult."
+
+"Just a second. This means that the default label is `useValue`, let me test it."
+
+\*Comments out useDebug invocation\*
+
+"Hmmm, the DevTools still show `Value`. It must be an issue with hot reloading. Let me refresh the page. It's still the same... Let me make sure that I correctly saved the file. It's still the same. And what about the commented out hook - nothings out of the ordinary."
+
+So I can to the conclusion that with version `4.6.0` of React DevTools it is no longer necessary to use the `useDebugValue` hook since the name of the hook will be properly formatted and used as the label. However, there still may be a use case for the `useDebugValue` hook and it has to do with the second parameter the hook accepts. There are no mentions of this parameter in the docs, luckily for use the [typings for react](https://npmjs.org/package/@types/react) provides more insight.
+
+> What's the point of the second parameter?
+
+It's simple - it's named format and it does exactly that. it's signature depends on the first argument which is the value returned by the hook, meaning that if the value were a string the type signature of the format function would be `format: (value: string) => any`. Albeit useful, the ability to format the value is not something which you would use consistently. What's more, in the case of the `useValue` hook applying any formatting like upper-casing or lower-casing the value would just be confusing. Nevertheless, the formatting may play a bigger role when the return type of the hook is a complex object.
+
+Enough storytelling, let's get our beaks wet by writing our first custom hook! Event though the `useDebugValue` hook is less exciting, writing custom hooks is a thrill.
 
 <!-- <iframe src="https://stackblitz.com/edit/react-usedebugvalue" width="100%" height="500px" /> -->
+
+Notice the usage of the `useCallback` hook, when writing hooks, which are reusable, especially as a library author, you may want to pay special attention to writing efficient code in every sense of the word. Make the consumers of your custom hook look up to you in quality. Importantly, however, nobody writes perfect code from the get go, unless they have written a similar program before, furthermore a custom hook is useless if it doesn't work correctly. Hence, make sure that your custom hooks work before refactoring your code to increase it's quality.
+
+A word which often goes hand to hand with the word refactoring is the word `TDD` and `writing test`. Just as it is difficult to write high quality efficient code in a single iteration, it is also difficult to refactor your code without first having written the the tests for it. Ask uncle Bob if you don't believe me. No, seriously check out one of his videos on the topic of [TDD](https://www.youtube.com/watch?v=qkblc5WRn-U).
+
+Now that I've talked about writing custom hooks and writing test in the same sentence, I've probably left you wondering how to test custom hooks and some of you may also wonder how to test your components which consume React hooks or custom hooks. I didn't plan to include this section in the course but I'll make sure to leave room for it. So be on the lookout in of of the future section.
 
 ## Creating your own hooks
 
@@ -828,6 +852,10 @@ Thirdly, you may effortless develop and display your components in [storybook](h
 There is, however, a third approach inspired by microservices. Namely, if you think redux as a message broker and your components as services. In a nutshell, the main selling point of a microservice architecture is that it enables you to keep your services decoupled. For example service A, which depends on service B, doesn't have to know how to communicate with service B directly. Else if service B were to be replaced with service C which behaves completely the same as B, despite the fact, service A would have to be altered. Namely, the reference which A holds to B would have to be replaced with a reference to C. A message broker solves this issue by having the individual service dispatch messages which are usually serializeable. The message broker is now responsible for passing the messages between services and the services themselves just have to know which actions they want to listen to and dispatch. You may have noticed that we haven't entirely decoupled our services from the rest of the world (else the service would turn into a pure function), we just narrowed down it's dependencies to a minimum. The only reference the services have to hold is a reference to the message broker. Specifically how to read and write (select and dispatch actions). Following the principles of CQRS it is preferable to keep these two operations separate. Fortunately, the message broker is not something which is often replaced. Even if it did, due to the fundamental simplicity of a message broker, the upgrade would be large scale but not very complicated. This means that it could be automated.
 
 In conclusion, hooks are a great addition to the react ecosystem and there are plenty of use cases for hooks. Similarly to HOC's hooks may encapsulate logic and/or side effects and keep out code DRY. On top of that, hooks can be used inside the body of functional component. Taking that into consideration, never again do you have to write a class component. Currently, however, with the notable exception of error boundaries. For more information about this limitation, check out [why is X not a hook?](https://overreacted.io/why-isnt-x-a-hook/).
+
+## Testing custom hooks
+
+### Testing component which use custom hooks
 
 ## Migrating common libraries to hooks
 
