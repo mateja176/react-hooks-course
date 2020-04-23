@@ -52,6 +52,8 @@
     - [usePagination](#usepagination)
     - [Going up a notch with middleware](#going-up-a-notch-with-middleware)
     - [Angular like services and dependency injection](#angular-like-services-and-dependency-injection)
+  - [Testing custom hooks](#testing-custom-hooks)
+    - [Testing components which use custom hooks](#testing-components-which-use-custom-hooks)
   - [Hooks vs HOC's](#hooks-vs-hocs)
     - [Pros of hooks](#pros-of-hooks)
       - [Selecting a value from the state with HOC's](#selecting-a-value-from-the-state-with-hocs)
@@ -61,8 +63,6 @@
       - [Create multiple components with a single hook](#create-multiple-components-with-a-single-hook)
       - [Create multiple components with a single HOC 2](#create-multiple-components-with-a-single-hoc-2)
       - [Create multiple components with a single hook 2](#create-multiple-components-with-a-single-hook-2)
-  - [Testing custom hooks](#testing-custom-hooks)
-    - [Testing component which use custom hooks](#testing-component-which-use-custom-hooks)
   - [Migrating common libraries to hooks](#migrating-common-libraries-to-hooks)
     - [react-redux](#react-redux)
     - [react-router](#react-router)
@@ -683,6 +683,10 @@ Imagine that you are building an app which is using JWT based authentication. Th
 
 `useState` and `useEffect`
 
+## Testing custom hooks
+
+### Testing components which use custom hooks
+
 ## Hooks vs HOC's
 
 You can read about what the creator of [recompose](https://github.com/acdlite/recompose), the de facto React HOC's library, had say about hooks at the top of the repository's README file. However, in a nutshell, React is heading towards hooks and recompose is no longer actively maintained.
@@ -852,10 +856,6 @@ Thirdly, you may effortless develop and display your components in [storybook](h
 There is, however, a third approach inspired by microservices. Namely, if you think redux as a message broker and your components as services. In a nutshell, the main selling point of a microservice architecture is that it enables you to keep your services decoupled. For example service A, which depends on service B, doesn't have to know how to communicate with service B directly. Else if service B were to be replaced with service C which behaves completely the same as B, despite the fact, service A would have to be altered. Namely, the reference which A holds to B would have to be replaced with a reference to C. A message broker solves this issue by having the individual service dispatch messages which are usually serializeable. The message broker is now responsible for passing the messages between services and the services themselves just have to know which actions they want to listen to and dispatch. You may have noticed that we haven't entirely decoupled our services from the rest of the world (else the service would turn into a pure function), we just narrowed down it's dependencies to a minimum. The only reference the services have to hold is a reference to the message broker. Specifically how to read and write (select and dispatch actions). Following the principles of CQRS it is preferable to keep these two operations separate. Fortunately, the message broker is not something which is often replaced. Even if it did, due to the fundamental simplicity of a message broker, the upgrade would be large scale but not very complicated. This means that it could be automated.
 
 In conclusion, hooks are a great addition to the react ecosystem and there are plenty of use cases for hooks. Similarly to HOC's hooks may encapsulate logic and/or side effects and keep out code DRY. On top of that, hooks can be used inside the body of functional component. Taking that into consideration, never again do you have to write a class component. Currently, however, with the notable exception of error boundaries. For more information about this limitation, check out [why is X not a hook?](https://overreacted.io/why-isnt-x-a-hook/).
-
-## Testing custom hooks
-
-### Testing component which use custom hooks
 
 ## Migrating common libraries to hooks
 
