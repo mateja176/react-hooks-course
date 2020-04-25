@@ -539,7 +539,31 @@ And also noticeably, the callback param of `useCallback` doesn't any parameters.
 
 #### Is memoization worth it
 
-[Profiling](https://reactjs.org/docs/profiler.html)
+From my very first contact with the memoization hooks (`useMemo` and `useCallback`), I liked the idea of being able to further optimize my code's performance. However as we discussed, the usage of the before mentioned hooks comes at the cost of readability. So in order to be able to make quality decisions on whether or not the trade-off is worth it in a given situation, it is essential to know the impact and have proof concrete backing up your decisions. Fortunately, React provides us with a Swiss army knife of tools one of which is the [Profiler](https://reactjs.org/docs/profiler.html) component. The `Profiler` is very powerful and yet very simple to use.
+
+The majority of the complexity related to the `Profiler` comes down to the `onRender` callback. It accepts a number of arguments:
+
+| prop           | description                                                               |
+| -------------- | ------------------------------------------------------------------------- |
+| id             | the "id" prop of the Profiler tree that has just committed                |
+| phase          | either "mount" (if the tree just mounted) or "update" (if it re-rendered) |
+| actualDuration | time spent rendering the committed update                                 |
+| baseDuration   | estimated time to render the entire subtree without memoization           |
+| startTime      | when React began rendering this update                                    |
+| commitTime     | when React committed this update                                          |
+| interactions   | the Set of interactions belonging to this update                          |
+
+We are going to be focusing on the properties which enable us to determine the effects of `useMemo`. Firstly, the `id` is required and its of type string. The string should match the name of the component you rare profiling. It is also required for the component being profiled appear as a child of the respective `Profiler`. Secondly, the `actualDuration`. It is going to be the limelight of the experiments. The reason for it is encompassed by the following insert from the docs:
+
+> actualDuration: number - Time spent rendering the Profiler and its descendants for the current update. This indicates how well the subtree makes use of memoization (e.g. React.memo, useMemo, shouldComponentUpdate). Ideally this value should decrease significantly after the initial mount as many of the descendants will only need to re-render if their specific props change.
+
+<!-- <iframe src="https://stackblitz.com/edit/react-profiler-example" width="100%" height="500px" /> -->
+
+This is the setup and experiment which will be performed illustrates the point but is rather simple. Namely, the `getFibonacci` function is going to enable us to incrementally increase the computational strain on the non-memoized component which will sooner or later stand out compared to the memoized version. What's more, the `actualDuration` of the render for the memoized component should stay roughly the same in the case that we are not updating any dependency of the `getFibonacci` function (the `ordinal` to be exact). The `getFibonacci` function's time complexity increases drastically as we increase the ordinal, to the point that after having entered `9999` I received a stackoverflow error(this was performed on a second generation Ryzen 7 laptop). Since there is a significant jump in complexity with each additional digit the idea is to run benchmarks for a single, double and triple digits. Furthermore, to be able to compare the results we are going to render a non-memoized and a memoized version of the Fibonacci component. By non-memoized I mean a component which calculates the Fibonacci number at a given place based on the supplied ordinal prop. Each time the component renders the computation is going to be performed form the ground up. Whereas the memoized sibling of the component has the computation wrapped in a `useMemo` hook with a single dependency, the ordinal, which is passed as an argument to the `getFibonacci` function. On the other hand, we are not going to be running the tests for both component simultaneously since they rely on the same state. Although, every step along the way, including the most insightful growth rate statistic are going to be logged to the console. In this example I specified 50 iterations and based on the profiler data from those 50 iterations an average is induced. Moreover, based on the averages the growth rates are calculated from lower to higher (left to right).
+
+After a couple of runs, in case of the memoized component the growth rates where deviations I observed where around 20%. Although the averages, in case of the memoized component, are expected to be roughly the same, there are divinations and that is normal considering that the `actualDuration` is a small number. Meaning that the absolute differences are miniscule. On the other hand after having ran the non-memoized version of the component a number of times some distinctions where obvious. Namely, the growth rate from the 9th to the 99th was circa 20% on average. Although as mentioned before this isn't a significant amount, however the increase was rather consistent. Moreover, the growth rate from the 99th to the 999th shot up by a more significant margin. Around 300% on average, now that is a more noticeable result.
+
+The conclusion is that's probably not necessary to memoize simple expressions and functions unless you are working on a piece of code in the critical path or you require referential integrity to be preserved when working with highly optimized components.
 
 ## Rules of hooks
 
