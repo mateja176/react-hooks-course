@@ -1,4 +1,5 @@
 {
+  "eslint.workingDirectories": ["./custom-hooks"],
   "cSpell.words": [
     "Abramov",
     "FC's",
