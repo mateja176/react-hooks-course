@@ -1,7 +1,7 @@
 import React from 'react';
+import { combineReducers } from '../utils';
 import { initialStoriesState, story } from './slices';
 import { dialog, initialDialogState } from './slices/dialog';
-import { combineReducers } from './utils';
 
 export const initialState: State = {
   story: initialStoriesState,

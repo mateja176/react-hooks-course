@@ -1,4 +1,4 @@
-import { IStories, IStory } from '../../models';
+import { IStories, IStory } from '../../../models';
 
 export interface StoriesState {
   stories: IStories;

@@ -1,8 +1,7 @@
 import React from 'react';
 import { useActions } from '../hooks';
 import { CreationStory } from '../models';
-import { createAddStory } from '../utils';
-import { createToggleIsDialogOpen } from '../utils/slices/dialog';
+import { createAddStory, createToggleIsDialogOpen } from '../utils';
 
 export interface AddStoryProps {}
 

@@ -1,5 +1,5 @@
+import { compose } from '../../utils';
 import { State } from '../reducer';
-import { compose } from '../utils';
 
 export const selectStoryState = ({ story }: State) => story;
 
