@@ -31,10 +31,17 @@ export const useFetchTopStoryIds = (
 
   const hasError = data instanceof Error;
 
+  const refetch = hasError
+    ? () => {
+        setParams({ ...params });
+      }
+    : () => {};
+
   return {
     topStoryIds,
     isLoading: data === 'loading',
     hasError,
     error: hasError ? data : null,
+    refetch,
   };
 };
