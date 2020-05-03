@@ -2,9 +2,6 @@ import { useEffect, useState } from 'react';
 import { StoryIds } from '../models';
 import { RequestData } from '../models/request';
 import { fetchTopStoryIds } from '../services';
-import { getRequestResult } from '../utils/request';
-
-const initialTopStoryIds: StoryIds = [];
 
 export const useFetchTopStoryIds = (
   init: RequestInit,
@@ -27,7 +24,10 @@ export const useFetchTopStoryIds = (
     fetchTopStoryIds(params).then(setData);
   }, [params]);
 
-  const topStoryIds = getRequestResult(initialTopStoryIds)(data);
+  const topStoryIds =
+    data === 'initial' || data === 'loading' || data instanceof Error
+      ? []
+      : data;
 
   const hasError = data instanceof Error;
 
@@ -38,6 +38,7 @@ export const useFetchTopStoryIds = (
     : () => {};
 
   return {
+    isInitial: data === 'initial',
     topStoryIds,
     isLoading: data === 'loading',
     hasError,

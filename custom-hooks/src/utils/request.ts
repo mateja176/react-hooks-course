@@ -1,10 +1,5 @@
-import { RequestData } from '../models/request';
+import { ErrorObject } from '../models/request';
 
-export const getRequestResult = <R>(initialResult: R) => (
-  data: RequestData<R>,
-) =>
-  data === 'initial'
-    ? initialResult
-    : data === 'loading' || data instanceof Error
-    ? null
-    : data;
+export function isErrorObject(object: any): object is ErrorObject {
+  return object.error instanceof Error && typeof object.retry === 'function';
+}
