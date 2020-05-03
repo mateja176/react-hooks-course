@@ -15,3 +15,5 @@ export interface IStory extends CreationStory {
 }
 
 export type IStories = IStory[];
+
+export type StoryIds = IStory['id'][];

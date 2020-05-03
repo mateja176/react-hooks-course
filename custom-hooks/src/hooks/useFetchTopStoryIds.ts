@@ -1,12 +1,26 @@
 import { useEffect, useState } from 'react';
-import { fetchTopStoryIds, TopStoryIds } from '../services';
+import { StoryIds } from '../models';
+import { RequestData } from '../models/request';
+import { fetchTopStoryIds } from '../services';
+import { getRequestResult } from '../utils/request';
+
+const initialTopStoryIds: StoryIds = [];
 
 export const useFetchTopStoryIds = (init: RequestInit) => {
-  const [topStoryIds, setTopStoryIds] = useState<TopStoryIds>([]);
+  const [data, setData] = useState<RequestData<StoryIds>>('initial');
 
   useEffect(() => {
-    fetchTopStoryIds(init).then(setTopStoryIds);
+    fetchTopStoryIds(init).then(setData);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  return topStoryIds;
+  const topStoryIds = getRequestResult(initialTopStoryIds)(data);
+
+  const hasError = data instanceof Error;
+
+  return {
+    topStoryIds,
+    isLoading: data === 'loading',
+    hasError,
+    error: hasError ? data : null,
+  };
 };
