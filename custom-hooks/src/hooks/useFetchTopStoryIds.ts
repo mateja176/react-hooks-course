@@ -6,12 +6,26 @@ import { getRequestResult } from '../utils/request';
 
 const initialTopStoryIds: StoryIds = [];
 
-export const useFetchTopStoryIds = (init: RequestInit) => {
+export const useFetchTopStoryIds = (
+  init: RequestInit,
+  compare: (
+    newParams: RequestInit,
+    currentParams: RequestInit,
+  ) => boolean = () => false,
+) => {
   const [data, setData] = useState<RequestData<StoryIds>>('initial');
 
+  const [params, setParams] = useState(init);
+
   useEffect(() => {
-    fetchTopStoryIds(init).then(setData);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    setParams((currentParams) =>
+      compare(init, currentParams) ? init : currentParams,
+    );
+  }, [init]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    fetchTopStoryIds(params).then(setData);
+  }, [params]);
 
   const topStoryIds = getRequestResult(initialTopStoryIds)(data);
 
