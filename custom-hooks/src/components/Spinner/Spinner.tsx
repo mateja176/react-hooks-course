@@ -6,11 +6,11 @@ export interface SpinnerProps {
 }
 
 const markerStyle: React.CSSProperties = {
-  marginTop: 20,
+  margin: '20px 0',
   height: 50,
   width: 50,
   borderRadius: '50%',
-  border: '10px solid royalblue',
+  border: '10px solid #41adff',
   clipPath: 'polygon(0 0, 100% 0, 100% 50%, 0 50%)',
 };
 
