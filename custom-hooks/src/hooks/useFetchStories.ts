@@ -1,4 +1,3 @@
-import { OrderedMap } from 'immutable';
 import { range } from 'lodash';
 import { useEffect, useState } from 'react';
 import { ErrorObject, IStory, StoryIds } from '../models';
@@ -9,27 +8,42 @@ export interface FetchStoriesParams {
   ids: StoryIds;
 }
 
-export type StoryValues = IStory | 'loading' | ErrorObject;
+export type StoryData = IStory | 'loading' | ErrorObject;
 
-export type StoriesData = OrderedMap<IStory['id'], StoryValues>;
+export interface DataWithId {
+  id: IStory['id'];
+  data: StoryData;
+}
+
+export type DataWithIds = DataWithId[];
 
 export const useFetchStories = ({ ids, batchSize }: FetchStoriesParams) => {
   const [offset, setOffset] = useState(0);
-  const [data, setData] = useState<StoriesData>(OrderedMap());
+  const [dataWithIds, setDataWithIds] = useState<DataWithIds>([]);
 
-  const setOne = (id: IStory['id'], value: StoryValues) => {
-    setData((currentDate) => currentDate.set(id, value));
+  const createDataWithId = (id: IStory['id'], data: StoryData) => {
+    setDataWithIds((currentDataWithIds) =>
+      currentDataWithIds.concat({ id, data }),
+    );
+  };
+
+  const setDataWithId = (id: IStory['id'], data: StoryData) => {
+    setDataWithIds((currentDataWithIds) =>
+      currentDataWithIds.map((dataWithId) =>
+        dataWithId.id === id ? { id, data } : dataWithId,
+      ),
+    );
   };
 
   const fetchStoryForId = (id: IStory['id']) => {
-    setOne(id, 'loading');
+    createDataWithId(id, 'loading');
 
     return fetchStory({ id })
       .then((story) => {
-        setOne(id, story);
+        setDataWithId(id, story);
       })
       .catch((error) => {
-        setOne(id, {
+        setDataWithId(id, {
           error,
           retry: () => {
             fetchStoryForId(id);
@@ -48,11 +62,9 @@ export const useFetchStories = ({ ids, batchSize }: FetchStoriesParams) => {
     }
   }, [ids, batchSize, offset]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const stories = Array.from(data.values());
-
   const fetchMore = () => {
     setOffset((currentOffset) => currentOffset + batchSize);
   };
 
-  return { stories, fetchMore };
+  return { dataWithIds, fetchMore };
 };

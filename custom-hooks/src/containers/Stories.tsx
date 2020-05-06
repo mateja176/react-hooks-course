@@ -2,7 +2,7 @@ import { debounce } from 'lodash';
 import React from 'react';
 import { Spinner, Story } from '../components';
 import { useSelector } from '../hooks';
-import { useFetchStories } from '../hooks/useFetchStories';
+import { DataWithIds, useFetchStories } from '../hooks/useFetchStories';
 import { useFetchTopStoryIds } from '../hooks/useFetchTopStoryIds';
 import { isErrorObject, selectStories } from '../utils';
 
@@ -54,9 +54,9 @@ export const Stories: React.FC<StoriesProps> = () => {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const allStories: typeof storyState.stories = [
-    ...stories,
-    ...storyState.stories,
+  const dataWithIds: DataWithIds = [
+    ...stories.map((story) => ({ id: story.id, data: story })),
+    ...storyState.dataWithIds,
   ];
 
   return (
@@ -72,25 +72,27 @@ export const Stories: React.FC<StoriesProps> = () => {
             {storyIdState.error}{' '}
             <button onClick={storyIdState.refetch}>Retry</button>
           </p>
-        ) : storyState.stories.length === 0 ? (
+        ) : dataWithIds.length === 0 ? (
           <p>No stories at the moment</p>
         ) : (
-          <div>
-            {allStories.map((story) =>
-              story === 'loading' ? (
-                <p style={{ height: storyHeight }}>Loading Story...</p>
-              ) : isErrorObject(story) ? (
-                <p>
-                  {story.error.message}{' '}
-                  <button onClick={story.retry}>Retry</button>
-                </p>
-              ) : (
-                <Story key={story.id} {...story} />
-              ),
-            )}
+          <div style={{ height: storyHeight }}>
+            {dataWithIds.map(({ id, data }) => (
+              <div key={id}>
+                {data === 'loading' ? (
+                  <p>Loading Story...</p>
+                ) : isErrorObject(data) ? (
+                  <p>
+                    {data.error.message}{' '}
+                    <button onClick={data.retry}>Retry</button>
+                  </p>
+                ) : (
+                  <Story {...data} />
+                )}
+              </div>
+            ))}
             <Spinner
               ref={markerRef}
-              isVisible={allStories.length >= batchSize}
+              isVisible={dataWithIds.length >= batchSize}
             />
           </div>
         )}
