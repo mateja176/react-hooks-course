@@ -38,6 +38,7 @@ export const useFetchTopStoryIds = (
     : () => {};
 
   return {
+    hasLoaded: topStoryIds.length > 0,
     isInitial: data === 'initial',
     topStoryIds,
     isLoading: data === 'loading',

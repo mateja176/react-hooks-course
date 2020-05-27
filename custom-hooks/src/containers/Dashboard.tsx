@@ -2,7 +2,7 @@ import React from 'react';
 import { useActions, useSelector } from '../hooks';
 import { createSetIsDialogOpen, selectIsDialogOpen } from '../utils';
 import { AddStory } from './AddStory';
-import { Stories } from './Stories';
+import { StoriesContainer } from './Stories/StoriesContainer';
 
 export interface DashboardProps {}
 
@@ -51,7 +51,7 @@ export const Dashboard: React.FC<DashboardProps> = () => {
         <AddStory />
       </dialog>
       <button onClick={openDialog}>Add story</button>
-      <Stories />
+      <StoriesContainer />
     </div>
   );
 };
