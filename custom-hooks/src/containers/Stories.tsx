@@ -63,9 +63,7 @@ export const Stories: React.FC<StoriesProps> = () => {
     <div>
       <h1>Stories</h1>
       <ol>
-        {storyIdState.isInitial ? (
-          <Spinner />
-        ) : storyIdState.isLoading ? (
+        {storyIdState.isInitial || storyIdState.isLoading ? (
           <p>Loading stories...</p>
         ) : storyIdState.error ? (
           <p>
