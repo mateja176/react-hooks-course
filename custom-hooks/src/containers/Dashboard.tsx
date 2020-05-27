@@ -50,7 +50,7 @@ export const Dashboard: React.FC<DashboardProps> = () => {
       <dialog ref={dialogRef} open={isDialogOpen} onClick={handleDialogClick}>
         <AddStory />
       </dialog>
-      <button onClick={openDialog}>Open dialog</button>
+      <button onClick={openDialog}>Add story</button>
       <Stories />
     </div>
   );
