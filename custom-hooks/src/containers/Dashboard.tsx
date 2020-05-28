@@ -6,9 +6,22 @@ import { TopStories } from './Stories';
 
 export interface DashboardProps {}
 
-const containerStyle: React.CSSProperties = {
+const padding = 20;
+
+const rootStyle: React.CSSProperties = {
   height: '100vh',
-  padding: 20,
+};
+
+const headerStyle: React.CSSProperties = {
+  position: 'fixed',
+  width: '100%',
+  display: 'flex',
+  justifyContent: 'flex-end',
+  padding,
+};
+
+const containerStyle: React.CSSProperties = {
+  padding,
 };
 
 export const Dashboard: React.FC<DashboardProps> = () => {
@@ -46,12 +59,16 @@ export const Dashboard: React.FC<DashboardProps> = () => {
   };
 
   return (
-    <div style={containerStyle}>
+    <div style={rootStyle}>
       <dialog ref={dialogRef} open={isDialogOpen} onClick={handleDialogClick}>
         <AddStory />
       </dialog>
-      <button onClick={openDialog}>Add story</button>
-      <TopStories />
+      <div style={headerStyle}>
+        <button onClick={openDialog}>Add story</button>
+      </div>
+      <div style={containerStyle}>
+        <TopStories />
+      </div>
     </div>
   );
 };
