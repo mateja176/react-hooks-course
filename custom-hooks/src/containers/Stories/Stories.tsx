@@ -8,6 +8,10 @@ import { isErrorObject, selectStories } from '../../utils';
 
 const storyHeight = 44;
 
+const listItemStyle: React.CSSProperties = {
+  height: storyHeight,
+};
+
 const batchSize = 20;
 
 export interface StoriesProps {
@@ -60,7 +64,7 @@ export const Stories: React.FC<StoriesProps> = ({ storyIds }) => {
   return (
     <ol>
       {mergedData.map(({ id, data }) => (
-        <li key={id}>
+        <li key={id} style={listItemStyle}>
           {data === 'loading' ? (
             <p>Loading Story...</p>
           ) : isErrorObject(data) ? (
