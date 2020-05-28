@@ -54,24 +54,11 @@ export const Dashboard: React.FC<DashboardProps> = () => {
 
   const dialogRef = React.useRef<HTMLDialogElement | null>(null);
 
-  React.useEffect(() => {
-    const eventType: keyof WindowEventMap = 'click';
-    const handleClickOutside = () => {
-      if (isDialogOpen) {
-        setIsDialogOpen(false);
-      }
-    };
+  const handleDialogClick: React.MouseEventHandler = (e) => {
+    toggleDialog();
+  };
 
-    window.addEventListener(eventType, handleClickOutside);
-
-    return () => {
-      window.removeEventListener(eventType, handleClickOutside);
-    };
-  }, [isDialogOpen, setIsDialogOpen]);
-
-  const handleDialogClick: React.DialogHTMLAttributes<
-    HTMLDialogElement
-  >['onClick'] = (e) => {
+  const handleDialogBoxClick: React.MouseEventHandler = (e) => {
     e.stopPropagation();
   };
 
@@ -83,7 +70,7 @@ export const Dashboard: React.FC<DashboardProps> = () => {
         onClick={handleDialogClick}
         style={{ ...dialogStyle, display: isDialogOpen ? 'flex' : 'none' }}
       >
-        <div style={dialogBoxStyle}>
+        <div style={dialogBoxStyle} onClick={handleDialogBoxClick}>
           <AddStory />
         </div>
       </dialog>
