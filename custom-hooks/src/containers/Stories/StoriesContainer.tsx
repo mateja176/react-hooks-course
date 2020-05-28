@@ -11,6 +11,7 @@ export const StoriesContainer: React.FC<StoriesContainerProps> = () => {
     error,
     refetch,
     hasLoaded,
+    isEmpty,
     topStoryIds,
   } = useFetchTopStoryIds({});
 
@@ -25,7 +26,11 @@ export const StoriesContainer: React.FC<StoriesContainerProps> = () => {
             {error} <button onClick={refetch}>Retry</button>
           </p>
         ) : hasLoaded ? (
-          <Stories storyIds={topStoryIds} />
+          isEmpty ? (
+            <p>No stories at the moment</p>
+          ) : (
+            <Stories storyIds={topStoryIds} />
+          )
         ) : null}
       </ol>
     </div>

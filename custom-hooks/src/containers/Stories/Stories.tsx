@@ -59,9 +59,7 @@ export const Stories: React.FC<StoriesProps> = ({ storyIds }) => {
     ...storyState.dataWithIds,
   ];
 
-  return dataWithIds.length === 0 ? (
-    <p>No stories at the moment</p>
-  ) : (
+  return (
     <div style={{ height: storyHeight }}>
       {dataWithIds.map(({ id, data }) => (
         <div key={id}>
