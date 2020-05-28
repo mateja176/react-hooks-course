@@ -18,7 +18,11 @@ const dialogStyle: React.CSSProperties = {
   background: 'rgba(255, 255, 255, 0.3)',
   justifyContent: 'center',
   alignItems: 'center',
+  display: 'flex',
   border: 'none',
+  transitionProperty: 'visibility,opacity',
+  transitionTimingFunction: 'ease-in-out',
+  transitionDuration: '500ms',
 };
 
 const dialogBoxStyle: React.CSSProperties = {
@@ -68,7 +72,11 @@ export const Dashboard: React.FC<DashboardProps> = () => {
         ref={dialogRef}
         open={isDialogOpen}
         onClick={handleDialogClick}
-        style={{ ...dialogStyle, display: isDialogOpen ? 'flex' : 'none' }}
+        style={{
+          ...dialogStyle,
+          visibility: isDialogOpen ? 'visible' : 'hidden',
+          opacity: isDialogOpen ? 1 : 0,
+        }}
       >
         <div style={dialogBoxStyle} onClick={handleDialogBoxClick}>
           <AddStory />
