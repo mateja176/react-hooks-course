@@ -58,9 +58,9 @@ export const Stories: React.FC<StoriesProps> = ({ storyIds }) => {
   ];
 
   return (
-    <div style={{ height: storyHeight }}>
+    <ol>
       {mergedData.map(({ id, data }) => (
-        <div key={id}>
+        <li key={id}>
           {data === 'loading' ? (
             <p>Loading Story...</p>
           ) : isErrorObject(data) ? (
@@ -70,9 +70,9 @@ export const Stories: React.FC<StoriesProps> = ({ storyIds }) => {
           ) : (
             <Story {...data} />
           )}
-        </div>
+        </li>
       ))}
       <Spinner ref={markerRef} isVisible={mergedData.length >= batchSize} />
-    </div>
+    </ol>
   );
 };

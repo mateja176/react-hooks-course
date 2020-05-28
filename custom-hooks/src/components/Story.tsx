@@ -9,13 +9,13 @@ export const Story: React.FC<StoryProps> = ({ title, url, type, time, by }) => {
   const dateString = date.toLocaleDateString();
 
   return (
-    <li>
+    <div>
       <a href={url} target="__blank">
         {title}
       </a>
       <div>
         {type} | <span title={dateString}>{timeString}</span> | {by}
       </div>
-    </li>
+    </div>
   );
 };

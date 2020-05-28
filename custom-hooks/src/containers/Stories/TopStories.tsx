@@ -18,7 +18,7 @@ export const TopStories: React.FC<TopStoriesProps> = () => {
   return (
     <div>
       <h1>Stories</h1>
-      <ol>
+      <div>
         {isInitial || isLoading ? (
           <p>Loading stories...</p>
         ) : error ? (
@@ -32,7 +32,7 @@ export const TopStories: React.FC<TopStoriesProps> = () => {
             <Stories storyIds={topStoryIds} />
           )
         ) : null}
-      </ol>
+      </div>
     </div>
   );
 };
