@@ -17,12 +17,10 @@ export interface StoriesProps {
 export const Stories: React.FC<StoriesProps> = ({ storyIds }) => {
   const stories = useSelector(selectStories);
 
-  const storyState = useFetchStories({
+  const { dataWithIds, fetchMore } = useFetchStories({
     ids: storyIds,
     batchSize,
   });
-
-  const { fetchMore } = storyState;
 
   const debouncedFetchMore = React.useCallback(debounce(fetchMore, 400), []);
 
@@ -54,14 +52,14 @@ export const Stories: React.FC<StoriesProps> = ({ storyIds }) => {
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const dataWithIds: DataWithIds = [
+  const mergedData: DataWithIds = [
     ...stories.map((story) => ({ id: story.id, data: story })),
-    ...storyState.dataWithIds,
+    ...dataWithIds,
   ];
 
   return (
     <div style={{ height: storyHeight }}>
-      {dataWithIds.map(({ id, data }) => (
+      {mergedData.map(({ id, data }) => (
         <div key={id}>
           {data === 'loading' ? (
             <p>Loading Story...</p>
@@ -74,7 +72,7 @@ export const Stories: React.FC<StoriesProps> = ({ storyIds }) => {
           )}
         </div>
       ))}
-      <Spinner ref={markerRef} isVisible={dataWithIds.length >= batchSize} />
+      <Spinner ref={markerRef} isVisible={mergedData.length >= batchSize} />
     </div>
   );
 };
