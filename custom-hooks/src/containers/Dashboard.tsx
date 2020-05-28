@@ -12,6 +12,22 @@ const rootStyle: React.CSSProperties = {
   height: '100vh',
 };
 
+const dialogStyle: React.CSSProperties = {
+  height: '100%',
+  width: '100%',
+  background: 'rgba(255, 255, 255, 0.3)',
+  justifyContent: 'center',
+  alignItems: 'center',
+  border: 'none',
+};
+
+const dialogBoxStyle: React.CSSProperties = {
+  background: 'white',
+  padding,
+  borderRadius: 5,
+  boxShadow: '10px 10px 30px #333',
+};
+
 const headerStyle: React.CSSProperties = {
   position: 'fixed',
   width: '100%',
@@ -22,6 +38,7 @@ const headerStyle: React.CSSProperties = {
 
 const containerStyle: React.CSSProperties = {
   padding,
+  height: '100%',
 };
 
 export const Dashboard: React.FC<DashboardProps> = () => {
@@ -31,8 +48,8 @@ export const Dashboard: React.FC<DashboardProps> = () => {
     setIsDialogOpen: createSetIsDialogOpen,
   });
 
-  const openDialog = () => {
-    setIsDialogOpen(true);
+  const toggleDialog = () => {
+    setIsDialogOpen(!isDialogOpen);
   };
 
   const dialogRef = React.useRef<HTMLDialogElement | null>(null);
@@ -60,13 +77,25 @@ export const Dashboard: React.FC<DashboardProps> = () => {
 
   return (
     <div style={rootStyle}>
-      <dialog ref={dialogRef} open={isDialogOpen} onClick={handleDialogClick}>
-        <AddStory />
+      <dialog
+        ref={dialogRef}
+        open={isDialogOpen}
+        onClick={handleDialogClick}
+        style={{ ...dialogStyle, display: isDialogOpen ? 'flex' : 'none' }}
+      >
+        <div style={dialogBoxStyle}>
+          <AddStory />
+        </div>
       </dialog>
       <div style={headerStyle}>
-        <button onClick={openDialog}>Add story</button>
+        <button onClick={toggleDialog}>Add story</button>
       </div>
-      <div style={containerStyle}>
+      <div
+        style={{
+          ...containerStyle,
+          overflow: isDialogOpen ? 'hidden' : 'auto',
+        }}
+      >
         <TopStories />
       </div>
     </div>
