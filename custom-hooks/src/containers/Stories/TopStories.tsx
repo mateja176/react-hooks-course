@@ -2,9 +2,9 @@ import React from 'react';
 import { useFetchTopStoryIds } from '../../hooks/useFetchTopStoryIds';
 import { Stories } from './Stories';
 
-export interface StoriesContainerProps {}
+export interface TopStoriesProps {}
 
-export const StoriesContainer: React.FC<StoriesContainerProps> = () => {
+export const TopStories: React.FC<TopStoriesProps> = () => {
   const {
     isInitial,
     isLoading,

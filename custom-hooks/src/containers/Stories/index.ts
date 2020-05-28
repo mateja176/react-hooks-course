@@ -1,2 +1,2 @@
 export * from './Stories';
-export * from './StoriesContainer';
+export * from './TopStories';
