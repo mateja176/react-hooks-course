@@ -2,11 +2,9 @@ import React from 'react';
 import { useActions, useSelector } from '../hooks';
 import { createSetIsDialogOpen, selectIsDialogOpen } from '../utils';
 import { AddStory } from './AddStory';
-import { TopStories } from './Stories';
+import { headerHeight, TopStories } from './Stories';
 
 export interface DashboardProps {}
-
-const padding = 20;
 
 const rootStyle: React.CSSProperties = {
   height: '100vh',
@@ -27,22 +25,21 @@ const dialogStyle: React.CSSProperties = {
 
 const dialogBoxStyle: React.CSSProperties = {
   background: 'white',
-  padding,
+  padding: 20,
   borderRadius: 5,
   boxShadow: '10px 10px 30px #333',
 };
 
 const headerStyle: React.CSSProperties = {
-  position: 'fixed',
-  width: '100%',
+  height: headerHeight,
   display: 'flex',
-  justifyContent: 'flex-end',
-  padding,
+  justifyContent: 'space-between',
+  alignItems: 'center',
 };
 
 const containerStyle: React.CSSProperties = {
-  padding,
   height: '100%',
+  padding: 20,
 };
 
 export const Dashboard: React.FC<DashboardProps> = () => {
@@ -82,15 +79,16 @@ export const Dashboard: React.FC<DashboardProps> = () => {
           <AddStory />
         </div>
       </dialog>
-      <div style={headerStyle}>
-        <button onClick={toggleDialog}>Add story</button>
-      </div>
       <div
         style={{
           ...containerStyle,
-          overflow: isDialogOpen ? 'hidden' : 'auto',
+          overflow: isDialogOpen ? 'hidden' : 'initial',
         }}
       >
+        <div style={headerStyle}>
+          <h1>Stories</h1>
+          <button onClick={toggleDialog}>Add story</button>
+        </div>
         <TopStories />
       </div>
     </div>

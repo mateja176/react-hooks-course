@@ -1,4 +1,3 @@
-import { range } from 'lodash';
 import { useEffect, useState } from 'react';
 import { ErrorObject, IStory, StoryIds } from '../models';
 import { fetchStory } from '../services';
@@ -8,7 +7,7 @@ export interface FetchStoriesParams {
   ids: StoryIds;
 }
 
-export type StoryData = IStory | 'loading' | ErrorObject;
+export type StoryData = 'initial' | 'loading' | IStory | ErrorObject;
 
 export interface DataWithId {
   id: IStory['id'];
@@ -18,14 +17,9 @@ export interface DataWithId {
 export type DataWithIds = DataWithId[];
 
 export const useFetchStories = ({ ids, batchSize }: FetchStoriesParams) => {
-  const [offset, setOffset] = useState(0);
-  const [dataWithIds, setDataWithIds] = useState<DataWithIds>([]);
-
-  const createDataWithId = (id: IStory['id'], data: StoryData) => {
-    setDataWithIds((currentDataWithIds) =>
-      currentDataWithIds.concat({ id, data }),
-    );
-  };
+  const [dataWithIds, setDataWithIds] = useState<DataWithIds>(
+    ids.map((id) => ({ id, data: 'initial' })),
+  );
 
   const setDataWithId = (id: IStory['id'], data: StoryData) => {
     setDataWithIds((currentDataWithIds) =>
@@ -36,8 +30,6 @@ export const useFetchStories = ({ ids, batchSize }: FetchStoriesParams) => {
   };
 
   const fetchStoryForId = (id: IStory['id']) => {
-    createDataWithId(id, 'loading');
-
     return fetchStory({ id })
       .then((story) => {
         setDataWithId(id, story);
@@ -52,19 +44,32 @@ export const useFetchStories = ({ ids, batchSize }: FetchStoriesParams) => {
       });
   };
 
-  useEffect(() => {
-    if (ids.length > batchSize) {
-      const storyIds = range(offset, offset + batchSize).map(
-        (ordinal) => ids[ordinal],
-      );
-
-      storyIds.forEach(fetchStoryForId);
-    }
-  }, [ids, batchSize, offset]); // eslint-disable-line react-hooks/exhaustive-deps
-
   const fetchMore = () => {
-    setOffset((currentOffset) => currentOffset + batchSize);
+    setDataWithIds((currentDataWithIds) => {
+      const offsetStart = dataWithIds.findIndex(
+        ({ data }) => data === 'initial',
+      );
+      const offsetStop = offsetStart + batchSize;
+
+      const ids = dataWithIds
+        .slice(offsetStart, offsetStop)
+        .map(({ id }) => id);
+
+      ids.forEach((id) => {
+        fetchStoryForId(id);
+      });
+
+      return dataWithIds.map((dataWithId) => {
+        const { id } = dataWithId;
+
+        return ids.includes(id) ? { id, data: 'loading' } : dataWithId;
+      });
+    });
   };
+
+  useEffect(() => {
+    fetchMore();
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { dataWithIds, fetchMore };
 };
