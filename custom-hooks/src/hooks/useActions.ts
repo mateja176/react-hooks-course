@@ -20,6 +20,6 @@ export const useActions = <
             dispatch(actionCreator(...params)),
         ]),
       ),
-    [], // eslint-disable-line react-hooks/exhaustive-deps
-  );
+    [dispatch, actionCreators],
+  ) as ActionCreators;
 };

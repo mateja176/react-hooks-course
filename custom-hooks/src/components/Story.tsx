@@ -3,7 +3,14 @@ import { IStory } from '../models';
 
 export interface StoryProps extends IStory {}
 
-export const Story: React.FC<StoryProps> = ({ title, url, type, time, by }) => {
+export const Story: React.FC<StoryProps> = ({
+  score,
+  title,
+  url,
+  type,
+  time,
+  by,
+}) => {
   const date = new Date(time);
   const timeString = date.toLocaleTimeString();
   const dateString = date.toLocaleDateString();
@@ -14,7 +21,8 @@ export const Story: React.FC<StoryProps> = ({ title, url, type, time, by }) => {
         {title}
       </a>
       <div>
-        {type} | <span title={dateString}>{timeString}</span> | {by}
+        {score} points | {type} | <span title={dateString}>{timeString}</span> |{' '}
+        {by}
       </div>
     </div>
   );

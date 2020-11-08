@@ -12,6 +12,7 @@ export interface CreationStory {
 export interface IStory extends CreationStory {
   id: number;
   time: number;
+  score: number;
 }
 
 export type IStories = IStory[];

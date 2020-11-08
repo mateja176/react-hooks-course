@@ -24,7 +24,7 @@ const dialogStyle: React.CSSProperties = {
 };
 
 const dialogBoxStyle: React.CSSProperties = {
-  background: 'white',
+  background: '#202b38',
   padding: 20,
   borderRadius: 5,
   boxShadow: '10px 10px 30px #333',
@@ -42,12 +42,15 @@ const containerStyle: React.CSSProperties = {
   padding: '20px 20px 0 20px',
 };
 
+// * avoids creating a new object on each render
+const actionCreators = {
+  setIsDialogOpen: createSetIsDialogOpen,
+};
+
 export const Dashboard: React.FC<DashboardProps> = () => {
   const isDialogOpen = useSelector(selectIsDialogOpen);
 
-  const { setIsDialogOpen } = useActions({
-    setIsDialogOpen: createSetIsDialogOpen,
-  });
+  const { setIsDialogOpen } = useActions(actionCreators);
 
   const toggleDialog = () => {
     setIsDialogOpen(!isDialogOpen);

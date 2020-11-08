@@ -21,10 +21,14 @@ const initialStory: CreationStory = {
   url: '',
 };
 
+// * avoids creating a new object on each render
+const actionCreators = {
+  toggleDialog: createToggleIsDialogOpen,
+  addStory: createAddStory,
+};
+
 export const AddStory: React.FC<AddStoryProps> = () => {
-  const { toggleDialog } = useActions({
-    toggleDialog: createToggleIsDialogOpen,
-  });
+  const { toggleDialog, addStory } = useActions(actionCreators);
 
   const [story, setStory] = React.useState(initialStory);
 
@@ -34,14 +38,17 @@ export const AddStory: React.FC<AddStoryProps> = () => {
     setStory({ ...story, [currentTarget.name]: currentTarget.value });
   };
 
-  const { addStory } = useActions({ addStory: createAddStory });
-
   return (
     <div>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          addStory({ ...story, time: Date.now(), id: Math.random() * 100 });
+          addStory({
+            ...story,
+            time: Date.now(),
+            id: Math.round(Math.random() * 1000),
+            score: 0,
+          });
           toggleDialog();
         }}
       >
