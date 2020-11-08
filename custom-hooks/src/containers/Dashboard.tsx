@@ -39,7 +39,7 @@ const headerStyle: React.CSSProperties = {
 
 const containerStyle: React.CSSProperties = {
   height: '100%',
-  padding: 20,
+  padding: '20px 20px 0 20px',
 };
 
 export const Dashboard: React.FC<DashboardProps> = () => {
