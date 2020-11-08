@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ErrorObject, IStory, StoryIds } from '../models';
 import { fetchStory } from '../services';
 
@@ -21,37 +21,40 @@ export const useFetchStories = ({ ids, batchSize }: FetchStoriesParams) => {
     ids.map((id) => ({ id, data: 'initial' })),
   );
 
-  const setDataWithId = (id: IStory['id'], data: StoryData) => {
+  const setDataWithId = useCallback((id: IStory['id'], data: StoryData) => {
     setDataWithIds((currentDataWithIds) =>
       currentDataWithIds.map((dataWithId) =>
         dataWithId.id === id ? { id, data } : dataWithId,
       ),
     );
-  };
+  }, []);
 
-  const fetchStoryForId = (id: IStory['id']) => {
-    return fetchStory({ id })
-      .then((story) => {
-        setDataWithId(id, story);
-      })
-      .catch((error) => {
-        setDataWithId(id, {
-          error,
-          retry: () => {
-            fetchStoryForId(id);
-          },
+  const fetchStoryForId = useCallback(
+    (id: IStory['id']) => {
+      return fetchStory({ id })
+        .then((story) => {
+          setDataWithId(id, story);
+        })
+        .catch((error) => {
+          setDataWithId(id, {
+            error,
+            retry: () => {
+              fetchStoryForId(id);
+            },
+          });
         });
-      });
-  };
+    },
+    [setDataWithId],
+  );
 
-  const fetchMore = () => {
-    setDataWithIds(() => {
-      const offsetStart = dataWithIds.findIndex(
+  const fetchMore = useCallback(() => {
+    setDataWithIds((currentDataWithIds) => {
+      const offsetStart = currentDataWithIds.findIndex(
         ({ data }) => data === 'initial',
       );
       const offsetStop = offsetStart + batchSize;
 
-      const ids = dataWithIds
+      const ids = currentDataWithIds
         .slice(offsetStart, offsetStop)
         .map(({ id }) => id);
 
@@ -59,13 +62,13 @@ export const useFetchStories = ({ ids, batchSize }: FetchStoriesParams) => {
         fetchStoryForId(id);
       });
 
-      return dataWithIds.map((dataWithId) => {
+      return currentDataWithIds.map((dataWithId) => {
         const { id } = dataWithId;
 
         return ids.includes(id) ? { id, data: 'loading' } : dataWithId;
       });
     });
-  };
+  }, [batchSize, fetchStoryForId]);
 
   useEffect(() => {
     fetchMore();

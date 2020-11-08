@@ -32,11 +32,17 @@ export const AddStory: React.FC<AddStoryProps> = () => {
 
   const [story, setStory] = React.useState(initialStory);
 
-  const handleChange = ({
-    currentTarget,
-  }: React.SyntheticEvent<HTMLInputElement | HTMLSelectElement>) => {
-    setStory({ ...story, [currentTarget.name]: currentTarget.value });
-  };
+  const handleChange = React.useCallback(
+    ({
+      currentTarget,
+    }: React.SyntheticEvent<HTMLInputElement | HTMLSelectElement>) => {
+      setStory((currentStory) => ({
+        ...currentStory,
+        [currentTarget.name]: currentTarget.value,
+      }));
+    },
+    [],
+  );
 
   return (
     <div>

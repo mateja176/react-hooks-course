@@ -52,9 +52,9 @@ export const Dashboard: React.FC<DashboardProps> = () => {
 
   const { setIsDialogOpen } = useActions(actionCreators);
 
-  const toggleDialog = () => {
+  const toggleDialog = React.useCallback(() => {
     setIsDialogOpen(!isDialogOpen);
-  };
+  }, [setIsDialogOpen, isDialogOpen]);
 
   const dialogRef = React.useRef<HTMLDialogElement | null>(null);
 
