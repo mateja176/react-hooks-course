@@ -6,10 +6,13 @@ export const initialDialogState: DialogState = {
   isOpen: false,
 };
 
-export enum DialogType {
-  setIsDialogOpen = 'dialog/setIsOpen',
-  toggleIsDialogOpen = 'dialog/toggleIsOpen',
-}
+// * cannot be an enum since any two fields on the same enum are of the same type
+// * and the actions type are required to be of different types
+// * in order for the switch reducer to distinguish actions on a per case basis
+export const DialogType = {
+  setIsDialogOpen: 'dialog/setIsOpen',
+  toggleIsDialogOpen: 'dialog/toggleIsOpen',
+} as const;
 
 export const createSetIsDialogOpen = (payload: DialogState['isOpen']) => ({
   type: DialogType.setIsDialogOpen,
@@ -18,9 +21,8 @@ export const createSetIsDialogOpen = (payload: DialogState['isOpen']) => ({
 export type CreateSetIsDialogOpen = typeof createSetIsDialogOpen;
 export type SetIsDialogOpenAction = ReturnType<CreateSetIsDialogOpen>;
 
-export const createToggleIsDialogOpen = (payload: DialogState['isOpen']) => ({
+export const createToggleIsDialogOpen = () => ({
   type: DialogType.toggleIsDialogOpen,
-  payload,
 });
 export type CreateToggleIsDialogOpen = typeof createToggleIsDialogOpen;
 export type ToggleIsDialogOpenAction = ReturnType<CreateToggleIsDialogOpen>;
