@@ -656,7 +656,7 @@ So I can to the conclusion that with version `4.6.0` of React DevTools it is no 
 
 > What's the point of the second parameter?
 
-It's simple - it's named format and it does exactly that. it's signature depends on the first argument which is the value returned by the hook, meaning that if the value were a string the type signature of the format function would be `format: (value: string) => any`. Albeit useful, the ability to format the value is not something which you would use consistently. What's more, in the case of the `useValue` hook applying any formatting like upper-casing or lower-casing the value would just be confusing. Nevertheless, the formatting may play a bigger role when the return type of the hook is a complex object.
+It's simple - it's named `format` and it does exactly that. it's signature depends on the first argument which is the value returned by the hook, meaning that if the value were a string the type signature of the format function would be `format: (value: string) => any`. Albeit useful, the ability to format the value is not something which you would use consistently. What's more, in the case of the `useValue` hook applying any formatting like upper-casing or lower-casing the value would just be confusing. Nevertheless, the formatting may play a bigger role when the return type of the hook is a complex object.
 
 Enough storytelling, let's get our beaks wet by writing our first custom hook! Event though the `useDebugValue` hook is less exciting, writing custom hooks is a thrill.
 
