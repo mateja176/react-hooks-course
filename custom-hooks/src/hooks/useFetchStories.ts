@@ -45,7 +45,7 @@ export const useFetchStories = ({ ids, batchSize }: FetchStoriesParams) => {
   };
 
   const fetchMore = () => {
-    setDataWithIds((currentDataWithIds) => {
+    setDataWithIds(() => {
       const offsetStart = dataWithIds.findIndex(
         ({ data }) => data === 'initial',
       );
