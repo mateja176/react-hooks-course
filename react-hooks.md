@@ -67,7 +67,6 @@
     - [react-redux](#react-redux)
     - [react-router](#react-router)
     - [material-ui](#material-ui)
-    - [xstate](#xstate)
     - [styled-components](#styled-components)
     - [react-spring](#react-spring)
   - [Parting message](#parting-message)
@@ -915,7 +914,7 @@ Reading this section left a bad aftertaste and if you're like me, the immediate 
 
 ### material-ui
 
-Material UI is using [jss](https://npmjs.org/package/jss) under the hood and exposes a similar API compared to [react-jss](https://npmjs.org/package/react-jss) hence if you learn one you have learned the other the a significant extent safe for certain caveats.
+Material UI is using [jss](https://npmjs.org/package/jss) under the hood and exposes a similar API compared to [react-jss](https://npmjs.org/package/react-jss) hence if you learn one you have learned the other to a significant extent, safe for certain caveats.
 
 `makeStyle`
 
@@ -923,7 +922,7 @@ Material UI is using [jss](https://npmjs.org/package/jss) under the hood and exp
 
 I agree. So for the next section let's do something more difficult by implementing a prop based animation. In order to make this work we are going to overcome a few hurdles along the way, but have faith.
 
-### xstate
+<!-- ### xstate -->
 
 ### styled-components
 
