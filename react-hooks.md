@@ -82,7 +82,7 @@ In the words of the creators:
 - Complex components become hard to understand
 - Classes confuse both people and machines
 
-If you want to read up on the why of hooks you may do so by following [this](https://reactjs.org/docs/hooks-intro.html#motivation) link.
+If you want to read up on the "why" of hooks you may do so by following [this](https://reactjs.org/docs/hooks-intro.html#motivation) link.
 
 There's even an [introductory video](https://youtu.be/dpw9EHDh2bM) on hooks by Dam Abramov
 
