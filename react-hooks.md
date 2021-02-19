@@ -709,7 +709,11 @@ Imagine that you are building an app which is using JWT based authentication. Th
 
 ## Testing custom hooks
 
+TODO
+
 ### Testing components which use custom hooks
+
+TODO
 
 ## Hooks vs HOC's
 
@@ -873,7 +877,7 @@ Thirdly, you may effortless develop and display your components in [storybook](h
 
  Before we cover the next section, which is really important, let's first glance over the following terms.
 
-[Serializeable](https://en.m.wikipedia.org/wiki/Serialization) - A message is serializeable if it can be stringified to JSON - which is not possible in the case of recursive structures.
+[Serializable](https://en.m.wikipedia.org/wiki/Serialization) - A message is serializeable if it can be stringified to JSON - which is not possible in the case of recursive structures.
 
 [CQRS](https://en.m.wikipedia.org/wiki/Command%E2%80%93query_separation) - Command Query Responsibility Segregation, states that every method should either be a command that performs an action, or a query that returns data to the caller, but not both.
 
@@ -895,7 +899,11 @@ I bet that you'll rarely ever want to connect another component using the higher
 
 `connect`
 
+TODO
+
 `useSelector`
+
+TODO
 
 `useDispatch`
 
@@ -903,15 +911,25 @@ Reading this section left a bad aftertaste and if you're like me, the immediate 
 
 `useActions`
 
+TODO
+
 ### react-router
 
 `withRouter`
 
+TODO
+
 `useHistory`
+
+TODO
 
 `useParams`
 
+TODO
+
 `useRouter`
+
+TODO
 
 ### material-ui
 
@@ -925,9 +943,15 @@ I agree. So for the next section let's do something more difficult by implementi
 
 ### xstate
 
+TODO
+
 ### styled-components
 
+TODO
+
 ### react-spring
+
+TODO
 
 ## Parting message
 
